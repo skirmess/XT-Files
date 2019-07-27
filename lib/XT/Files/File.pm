@@ -6,7 +6,7 @@ use warnings;
 
 our $VERSION = '0.001';
 
-use Class::Tiny qw(name);
+use Class::Tiny 1 qw(name);
 
 use overload (
     q{""}    => sub    { shift->name },

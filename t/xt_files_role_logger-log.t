@@ -8,7 +8,7 @@ use Test::Builder::Tester;
 use Test::Fatal;
 use Test::More 0.88;
 
-use Class::Tiny;
+use Class::Tiny 1;
 use Role::Tiny::With;
 
 with 'XT::Files::Role::Logger';

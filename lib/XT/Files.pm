@@ -6,7 +6,7 @@ use warnings;
 
 our $VERSION = '0.001';
 
-use Class::Tiny;
+use Class::Tiny 1;
 
 use Role::Tiny::With ();
 

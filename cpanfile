@@ -1,5 +1,5 @@
 requires 'Carp';
-requires 'Class::Tiny';
+requires 'Class::Tiny', '1';
 requires 'Cwd';
 requires 'File::Basename';
 requires 'File::Find';
