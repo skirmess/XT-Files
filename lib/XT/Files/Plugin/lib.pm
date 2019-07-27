@@ -19,10 +19,14 @@ sub run {
         my ( $key, $value ) = @{$arg};
 
         if ( $key eq 'lib' ) {
-            my $dir = Cwd::abs_path($value);
-            if ( ( defined $dir ) && ( -d $dir ) ) {
-                lib->import($dir);
+            if ( -d $value ) {
+                my $dir = Cwd::abs_path($value);
+
+                if ( ( defined $dir ) && ( -d $dir ) ) {
+                    lib->import($dir);
+                }
             }
+
             next ARG;
         }
 
