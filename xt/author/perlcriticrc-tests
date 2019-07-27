@@ -1,0 +1,12 @@
+[-ControlStructures::ProhibitCascadingIfElse]
+[ControlStructures::ProhibitPostfixControls]
+flowcontrol = BAIL_OUT die skip
+[-NamingConventions::Capitalization]
+[-RegularExpressions::RequireDotMatchAnything]
+[-RegularExpressions::RequireExtendedFormatting]
+[-RegularExpressions::RequireLineBoundaryMatching]
+[-Subroutines::ProtectPrivateSubs]
+[Subroutines::RequireFinalReturn]
+terminal_funcs = BAIL_OUT
+[-Variables::ProhibitPackageVars]
+[-Variables::RequireInitializationForLocalVars]

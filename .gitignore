@@ -1,0 +1,7 @@
+*.bak
+*~
+.*.swp
+.build
+.perlcritic_package.yml
+XT-Files-*
+tmp
