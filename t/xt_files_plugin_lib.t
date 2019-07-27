@@ -8,7 +8,7 @@ use Test::Builder::Tester;
 use Test::Fatal;
 use Test::More 0.88;
 
-use Cwd qw(abs_path);
+use Cwd qw(abs_path cwd);
 use File::Temp ();
 use lib        ();
 
@@ -19,6 +19,8 @@ use constant CLASS => 'XT::Files::Plugin::lib';
 like( exception { CLASS()->new() }, q{/xtf attribute required/}, q{new throws an exception if 'xtf' argument is missing} );
 
 like( exception { CLASS()->new( xtf => 'hello world' ) }, q{/'xtf' is not of class 'XT::Files'/}, q{new throws an exception if 'xtf' argument is not an XT::Files object} );
+
+my $cwd = cwd();
 
 # lib->import does some normalizing of @INC. We run this once before we take the reference.
 my $empty_dir = File::Temp->newdir();
@@ -53,7 +55,7 @@ is( $obj->run( [ [ lib => 'lib' ] ] ), undef, 'run returns undef' );
 is_deeply( [ $lib, @INC_pre ], \@INC, '... and does add the new lib dir to @INC' );          ## no critic (ValuesAndExpressions::RequireInterpolationOfMetachars)
 
 # required for File::Temp to remove dir at end
-chdir;                                                                                       ## no critic (InputOutput::RequireCheckedSyscalls)
+chdir $cwd;                                                                                  ## no critic (InputOutput::RequireCheckedSyscalls)
 
 note('test log_prefix');
 

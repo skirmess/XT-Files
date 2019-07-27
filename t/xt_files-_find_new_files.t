@@ -7,11 +7,14 @@ use warnings;
 use Test::Builder::Tester;
 use Test::More 0.88;
 
+use Cwd;
 use File::Temp;
 
 use XT::Files;
 
 use constant CLASS => 'XT::Files';
+
+my $cwd = cwd();
 
 chdir 'corpus/dist1' or die "chdir failed: $!";
 
@@ -80,7 +83,7 @@ SKIP: {
     is_deeply( [ sort @files ], [ sort qw(bin/hello.txt bin/a/world.txt) ], '... the correct ones (symlinks are skipped)' );
 
     # required for File::Temp to remove dir at end
-    chdir;    ## no critic (InputOutput::RequireCheckedSyscalls)
+    chdir $cwd;    ## no critic (InputOutput::RequireCheckedSyscalls)
 }
 
 #

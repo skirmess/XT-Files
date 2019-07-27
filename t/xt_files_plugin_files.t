@@ -8,6 +8,7 @@ use Test::Builder::Tester;
 use Test::Fatal;
 use Test::More 0.88;
 
+use Cwd;
 use File::Temp;
 
 use XT::Files;
@@ -18,6 +19,8 @@ use constant CLASS => 'XT::Files::Plugin::Files';
 like( exception { CLASS()->new() }, q{/xtf attribute required/}, q{new throws an exception if 'xtf' argument is missing} );
 
 like( exception { CLASS()->new( xtf => 'hello world' ) }, q{/'xtf' is not of class 'XT::Files'/}, q{new throws an exception if 'xtf' argument is not an XT::Files object} );
+
+my $cwd = cwd();
 
 chdir 'corpus/dist1' or die "chdir failed: $!";
 
@@ -104,7 +107,7 @@ is( $obj->run( [ [ bin => 'non-existing-file' ], [ bin => 'dir' ], [ bin => 'sym
 is( scalar @files, 0, '... found 0 files' );
 
 # allow File::Temp to remove the temporary dir
-chdir;    ## no critic (InputOutput::RequireCheckedSyscalls)
+chdir $cwd;    ## no critic (InputOutput::RequireCheckedSyscalls)
 
 #
 done_testing();
