@@ -8,7 +8,7 @@ VERSION
 
 SYNOPSIS
 
-    In your distribution, add a XT::Files configuration file:
+    In your distribution, add a XT::Files configuration file (optional):
 
         [Default]
         dirs = 0
@@ -19,37 +19,36 @@ SYNOPSIS
         test = t
         test = xt
 
-    In a .t file:
+    In a .t file (optional):
 
         use XT::Files;
 
-        my $xt = XT::Files->instance();
+        my $xt = XT::Files->initialize( -config => undef ));
         $xt->bin_dir('bin');
         $xt->module_dir('lib');
         $xt->test_dir('t');
 
-    In a Test:: module:
+    In a Test module (optional):
 
         use Test::XTFiles;
 
-        my @files = Test::XTFiles->new->all_module_files;
+        my @files = Test::XTFiles->new->all_perl_files;
 
 DESCRIPTION
 
     Author tests often iterate over your distributions files to check them.
-    Unfortunately, every XT test uses its own code and defaults to find the
-    files to check, which means they often don't fit the need of your
+    Unfortunately, every XT test uses its own code and defaults, to find
+    the files to check, which means they often don't fit the need of your
     distribution. Common problems are not checking bin or script or, if
     they do, assuming Perl files in bin or script end in .pl.
 
-    The idea of XT::Files is that it's the Test::s that know what they want
+    The idea of XT::Files is that it's the Tests that know what they want
     to check (e.g. module files), but it's the distribution that knows
     where these files can be found (e.g. in the lib directory and in the
     t/lib directory).
 
     Without XT::Files you are probably adding the same code to multiple .t
-    files under xt that iterate over a check_file function of the author
-    test.
+    files under xt that iterate over a check function of the test.
 
     XT::Files is a standard interface that makes it easy for author tests
     to ask the distribution for the kind of files it would like to test.
@@ -64,15 +63,18 @@ USAGE
  Usage for distribution authors
 
     The distribution can (and should) use an XT::Files configuration file.
-    The default names for the file is either .xtfilesrc or xtfiles.ini and
-    should be placed in the root directory of your distribution. Only one
-    of these files must exist. If you put it in a different location or
-    name it differently, you have to load it in every .t file
+    The default names for the file is either .xtfilesrc or xtfiles.ini in
+    the root directory of your distribution. Only one of these files must
+    exist. If you put it in a different location or name it differently,
+    you have to load it in every .t file
 
         XT::Files->initialize( -config => 'maint/xt_files.txt' );
 
     The config file contain a global section and a section for every used
-    plugin. Comments start with either # or ;,
+    plugin. Comments start with either # or ;.
+
+    The same plugin can be run multiple times by adding multiple sections
+    with the same name. Sections of the same name are not merged.
 
         # require at least this version of XT::Files
         :version = 0.001
@@ -87,13 +89,15 @@ USAGE
 
         # XT::Files::Plugin::Dirs
         # add directories with the bin_dir, module_dir or test_dir method
+        # from XT::Files
         [Dirs]
-        bin = maint/t
+        bin = maint
         module = maint/lib
-        test = main/t
+        test = maint/t
 
         # XT::Files::Plugin::Files
         # add files with the bin_file, module_file or test_file method
+        # from XT::Files
         [Files]
         bin = maint/config.pl
         pod = maint/contribute.pod
@@ -170,7 +174,8 @@ USAGE
     Don't try to be clever, that's the distributions job. Ask what makes
     sense to test - it's the distributions fault if a file is not correctly
     classified. And it's much easier for a distribution author to fix the
-    distributions config file then to guess correctly.
+    distributions config file then it is for the test author to guess
+    correctly.
 
  Methods from XT::Files
 
@@ -218,9 +223,10 @@ USAGE
     Checks if the XT::Files singleton exists and calls initialize without
     arguments if it does not. Then returns the singleton.
 
-    This method silently discards all arguments, it will always use the
-    default configuration which is the XT::Files config file or, if that
-    does not exist, the XT::Files::Plugin::Default plugin.
+    This method silently discards all arguments. If the singleton does not
+    exist, it will always use the default configuration which is the
+    XT::Files config file or, if that does not exist, the
+    XT::Files::Plugin::Default plugin.
 
     This is the method that is called by Test::XTFiles's new method.
 
@@ -229,7 +235,7 @@ USAGE
     Returns all files to be tested as XT::Files::File objects.
 
     You should probably use one or multiple of the methods of Test::XTFiles
-    if you need to obtain a list of files to be tested, either in a Test::
+    if you need to obtain a list of files to be tested, either in a Test
     test or in a .t test file.
 
  exclude( PATTERN )
@@ -270,7 +276,7 @@ USAGE
     as a Perl script file. If there is already an entry for FILENAME, the
     existing entry is replaced with a new entry.
 
-    head2 ignore_file( FILENAME )
+ ignore_file( FILENAME )
 
     Ignores a file from being tested. This method adds an undef entry for
     FILENAME. Use this to e.g. remove a single file from a directory:
@@ -331,13 +337,13 @@ USAGE
     string is used as package name. Otherwise XT::Files::Plugin:: is
     prepended to the string and this is used as package name.
 
-    The plugin method used Module::Load to load the plugin. If a VERSION is
+    The plugin method uses Module::Load to load the plugin. If a VERSION is
     defined it checks that versions parse of the VERSION isn't lower then
     the plugins version. VERSION can be undef which means every version is
-    accepted
+    accepted.
 
-    it then calls the plugins new method and passes $self and expects an
-    object of the plugin in return.
+    Then it calls the plugins new method and passes $self as the xtf
+    argument and expects an object of the plugin in return.
 
         my $plugin_object = NAME->new( xtf => $self );
 
@@ -346,7 +352,7 @@ USAGE
 
 EXAMPLES
 
- Example 1 Use a test that supports XT::Files with default config files
+ Example 1 Use a test that supports XT::Files with default config
 
     Because the Test::Pod::Links supports XT::Files we can just use the
     following two lines for our author test .t file.

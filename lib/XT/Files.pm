@@ -415,7 +415,7 @@ Version 0.001
 
 =head1 SYNOPSIS
 
-In your distribution, add a C<XT::Files> configuration file:
+In your distribution, add a C<XT::Files> configuration file (optional):
 
     [Default]
     dirs = 0
@@ -426,37 +426,36 @@ In your distribution, add a C<XT::Files> configuration file:
     test = t
     test = xt
 
-In a C<.t> file:
+In a C<.t> file (optional):
 
     use XT::Files;
 
-    my $xt = XT::Files->instance();
+    my $xt = XT::Files->initialize( -config => undef ));
     $xt->bin_dir('bin');
     $xt->module_dir('lib');
     $xt->test_dir('t');
 
-In a C<Test::> module:
+In a C<Test> module (optional):
 
     use Test::XTFiles;
 
-    my @files = Test::XTFiles->new->all_module_files;
+    my @files = Test::XTFiles->new->all_perl_files;
 
 =head1 DESCRIPTION
 
 Author tests often iterate over your distributions files to check them.
-Unfortunately, every XT test uses its own code and defaults to find the files
+Unfortunately, every XT test uses its own code and defaults, to find the files
 to check, which means they often don't fit the need of your distribution.
 Common problems are not checking F<bin> or F<script> or, if they do, assuming
 Perl files in F<bin> or F<script> end in C<.pl>.
 
-The idea of C<XT::Files> is that it's the C<Test::>s that know what they want
+The idea of C<XT::Files> is that it's the C<Test>s that know what they want
 to check (e.g. module files), but it's the distribution that knows where
 these files can be found (e.g. in the F<lib> directory and in the F<t/lib>
 directory).
 
 Without C<XT::Files> you are probably adding the same code to multiple F<.t>
-files under F<xt> that iterate over a C<check_file> function of the author
-test.
+files under F<xt> that iterate over a check function of the test.
 
 C<XT::Files> is a standard interface that makes it easy for author tests to
 ask the distribution for the kind of files it would like to test. And it can
@@ -472,14 +471,17 @@ know which files to test.
 
 The distribution can (and should) use an C<XT::Files> configuration file.
 The default names for the file is either C<.xtfilesrc> or C<xtfiles.ini>
-and should be placed in the root directory of your distribution. Only one of
-these files must exist. If you put it in a different location or name it
-differently, you have to load it in every F<.t> file
+in the root directory of your distribution. Only one of these files must
+exist. If you put it in a different location or name it differently, you
+have to load it in every F<.t> file
 
     XT::Files->initialize( -config => 'maint/xt_files.txt' );
 
 The config file contain a global section and a section for every used plugin.
-Comments start with either C<#> or C<;>,
+Comments start with either C<#> or C<;>.
+
+The same plugin can be run multiple times by adding multiple sections with
+the same name. Sections of the same name are not merged.
 
     # require at least this version of XT::Files
     :version = 0.001
@@ -494,13 +496,15 @@ Comments start with either C<#> or C<;>,
 
     # XT::Files::Plugin::Dirs
     # add directories with the bin_dir, module_dir or test_dir method
+    # from XT::Files
     [Dirs]
-    bin = maint/t
+    bin = maint
     module = maint/lib
-    test = main/t
+    test = maint/t
 
     # XT::Files::Plugin::Files
     # add files with the bin_file, module_file or test_file method
+    # from XT::Files
     [Files]
     bin = maint/config.pl
     pod = maint/contribute.pod
@@ -581,7 +585,7 @@ request these files from L<Test::XTFiles>:
 Don't try to be clever, that's the distributions job. Ask what makes sense to
 test - it's the distributions fault if a file is not correctly classified. And
 it's much easier for a distribution author to fix the distributions config
-file then to guess correctly.
+file then it is for the test author to guess correctly.
 
 =head2 Methods from XT::Files
 
@@ -631,9 +635,9 @@ you need the object.
 Checks if the C<XT::Files> singleton exists and calls C<initialize> without
 arguments if it does not. Then returns the singleton.
 
-This method silently discards all arguments, it will always use the default
-configuration which is the C<XT::Files> config file or, if that does not
-exist, the L<XT::Files::Plugin::Default> plugin.
+This method silently discards all arguments. If the singleton does not exist,
+it will always use the default configuration which is the C<XT::Files> config
+file or, if that does not exist, the L<XT::Files::Plugin::Default> plugin.
 
 This is the method that is called by L<Test::XTFiles>'s C<new> method.
 
@@ -642,7 +646,7 @@ This is the method that is called by L<Test::XTFiles>'s C<new> method.
 Returns all files to be tested as L<XT::Files::File> objects.
 
 You should probably use one or multiple of the methods of L<Test::XTFiles>
-if you need to obtain a list of files to be tested, either in a C<Test::>
+if you need to obtain a list of files to be tested, either in a C<Test>
 test or in a F<.t> test file.
 
 =head2 exclude( PATTERN )
@@ -681,7 +685,7 @@ Adds the file FILENAME to the list of files to be tested and marks it as a
 Perl script file. If there is already an entry for FILENAME, the existing
 entry is replaced with a new entry.
 
-head2 ignore_file( FILENAME )
+=head2 ignore_file( FILENAME )
 
 Ignores a file from being tested. This method adds an C<undef> entry for
 FILENAME. Use this to e.g. remove a single file from a directory:
@@ -742,13 +746,13 @@ If the name starts with a C<=>, the leading C<=> is removed and the remaining
 string is used as package name. Otherwise C<XT::Files::Plugin::> is prepended
 to the string and this is used as package name.
 
-The C<plugin> method used L<Module::Load> to load the plugin. If a VERSION
+The C<plugin> method uses L<Module::Load> to load the plugin. If a VERSION
 is defined it checks that L<version>s C<parse> of the VERSION isn't lower
 then the plugins version. VERSION can be undef which means every version is
-accepted
+accepted.
 
-it then calls the plugins C<new> method and passes C<$self> and expects an
-object of the plugin in return.
+Then it calls the plugins C<new> method and passes C<$self> as the C<xtf>
+argument and expects an object of the plugin in return.
 
     my $plugin_object = NAME->new( xtf => $self );
 
@@ -756,7 +760,7 @@ After that it calls the plugins C<run> method and passes it the KEYVALS_REF.
 
 =head1 EXAMPLES
 
-=head2 Example 1 Use a test that supports C<XT::Files> with default config files
+=head2 Example 1 Use a test that supports C<XT::Files> with default config
 
 Because the L<Test::Pod::Links> supports C<XT::Files> we can just use the
 following two lines for our author test F<.t> file.

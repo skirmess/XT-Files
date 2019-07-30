@@ -85,10 +85,20 @@ In the L<XT::Files> config file:
 =head1 DESCRIPTION
 
 Adds some directories to L<XT::Files> to be tested by author tests. Every
-file found in the directory is added, unless it's ignored, as the specified
-type.
+file found in the directory that matches the directory types criteria,
+is added, as the specified type.
 
 The files are searched recursive. Symlinks are skipped.
+
+The directories are sorted and processed in reverse order. This allows you to
+e.g. add
+
+    bin = maint
+    module = maint/lib
+
+and F<maint/lib> will be searched first. Then, when F<maint> is searched all
+the files found from F<maint/lib> won't be overwritten, effectively blocking
+them from being found as bin.
 
 The following options are supported:
 
