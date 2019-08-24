@@ -382,16 +382,23 @@ sub _load_default_config {
     my ($self) = @_;
 
     my $config;
-  FILE:
-    for my $file ( '.xtfilesrc', 'xtfiles.ini' ) {
-        next FILE if !-e $file;
-        $self->log_fatal("Multiple default config files found: '$config' and '$file'") if defined $config;
-        $config = $file;
+    if ( exists $ENV{XT_FILES_DEFAULT_CONFIG_FILE} ) {
+        $config = $ENV{XT_FILES_DEFAULT_CONFIG_FILE};
+        $self->log_fatal("XT_FILES_DEFAULT_CONFIG_FILE points to non-existing default config file '$config'") if !-f $config;
     }
+    else {
 
-    if ( !defined $config ) {
-        my $default_config = '[Default]';
-        $config = \$default_config;
+      FILE:
+        for my $file ( '.xtfilesrc', 'xtfiles.ini' ) {
+            next FILE if !-e $file;
+            $self->log_fatal("Multiple default config files found: '$config' and '$file'") if defined $config;
+            $config = $file;
+        }
+
+        if ( !defined $config ) {
+            my $default_config = '[Default]';
+            $config = \$default_config;
+        }
     }
 
     return $self->_load_config($config);
@@ -853,6 +860,18 @@ that support C<XT::Files> use.
     }
 
     done_testing();
+
+=head1 ENVIRONMENT
+
+=head2 XT_FILES_DEFAULT_CONFIG_FILE
+
+The C<XT_FILES_DEFAULT_CONFIG_FILE> environment variable can be used to
+specify a different default config file.
+
+The variable must contain the path to a file that can be read.
+
+This specifies only the default config file. This file is only used if
+C<XT::Files> is initialized with the default confie file.
 
 =head1 SEE ALSO
 

@@ -437,6 +437,18 @@ that support `XT::Files` use.
 
     done_testing();
 
+# ENVIRONMENT
+
+## XT\_FILES\_DEFAULT\_CONFIG\_FILE
+
+The `XT_FILES_DEFAULT_CONFIG_FILE` environment variable can be used to
+specify a different default config file.
+
+The variable must contain the path to a file that can be read.
+
+This specifies only the default config file. This file is only used if
+`XT::Files` is initialized with the default confie file.
+
 # SEE ALSO
 
 [Test::XTFiles](https://metacpan.org/pod/Test::XTFiles),

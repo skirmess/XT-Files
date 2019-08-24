@@ -2,6 +2,9 @@ Revision history for XT-Files
 
 {{$NEXT}}
 
+  - XT_FILES_DEFAULT_CONFIG_FILE can be used to specify a different
+    default config file
+
 0.001  2019-07-30 20:23:17 UTC
 
   - Initial release

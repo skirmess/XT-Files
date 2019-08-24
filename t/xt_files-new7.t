@@ -11,13 +11,13 @@ use File::Temp;
 
 use XT::Files;
 
-delete $ENV{XT_FILES_DEFAULT_CONFIG_FILE};
-
 use constant CLASS => 'XT::Files';
 
-chdir 'corpus/dist1' or die "chdir failed: $!";
+chdir 'corpus/dist5/root' or die "chdir failed: $!";
 
 is( CLASS()->_is_initialized, undef, 'singleton is not initialized' );
+
+local $ENV{XT_FILES_DEFAULT_CONFIG_FILE} = '../xtfilesrc.txt';
 
 my $tempdir          = File::Temp->newdir();
 my $report_file_base = "$tempdir/report_" . __LINE__;
