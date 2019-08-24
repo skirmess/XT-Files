@@ -137,14 +137,14 @@ on develop => sub {
     requires 'Test::More', '0.88';
     requires 'Test::NoTabs';
     requires 'Test::Perl::Critic';
-    requires 'Test::PerlTidy';
+    requires 'Test::PerlTidy::XTFiles';
     requires 'Test::Pod', '1.26';
     requires 'Test::Pod::LinkCheck';
-    requires 'Test::Pod::Links';
+    requires 'Test::Pod::Links', '0.003';
     requires 'Test::Portability::Files';
-    requires 'Test::RequiredMinimumDependencyVersion';
+    requires 'Test::RequiredMinimumDependencyVersion', '0.003';
     requires 'Test::Spelling', '0.12';
-    requires 'Test::Spelling::Comment', '0.003';
+    requires 'Test::Spelling::Comment', '0.005';
     requires 'Test::Version', '0.04';
     requires 'XT::Util';
 };
