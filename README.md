@@ -447,7 +447,7 @@ specify a different default config file.
 The variable must contain the path to a file that can be read.
 
 This specifies only the default config file. This file is only used if
-`XT::Files` is initialized with the default confie file.
+`XT::Files` is initialized with the default config file.
 
 # SEE ALSO
 

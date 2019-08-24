@@ -871,7 +871,7 @@ specify a different default config file.
 The variable must contain the path to a file that can be read.
 
 This specifies only the default config file. This file is only used if
-C<XT::Files> is initialized with the default confie file.
+C<XT::Files> is initialized with the default config file.
 
 =head1 SEE ALSO
 
