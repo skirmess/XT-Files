@@ -4,7 +4,7 @@ XT::Files - standard interface for author tests to find files to check
 
 # VERSION
 
-Version 0.001
+Version 0.002
 
 # SYNOPSIS
 
