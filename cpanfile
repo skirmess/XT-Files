@@ -34,6 +34,7 @@ on develop => sub {
     requires 'CPANPLUS';
     requires 'FindBin';
     requires 'JSON::MaybeXS';
+    requires 'Module::Info';
     requires 'Path::Tiny';
     requires 'Perl::Critic', '1.134';
     requires 'Perl::Critic::MergeProfile';
@@ -136,7 +137,7 @@ on develop => sub {
     requires 'Test::Mojibake';
     requires 'Test::More', '0.88';
     requires 'Test::NoTabs';
-    requires 'Test::Perl::Critic';
+    requires 'Test::Perl::Critic::XTFiles';
     requires 'Test::PerlTidy::XTFiles';
     requires 'Test::Pod', '1.26';
     requires 'Test::Pod::LinkCheck';
