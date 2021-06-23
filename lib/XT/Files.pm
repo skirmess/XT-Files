@@ -17,7 +17,7 @@ use File::Basename ();
 use File::Find     ();
 use Module::Load   ();
 use Scalar::Util   ();
-use version 0.77 ();
+use version 0.77   ();
 
 use XT::Files::File;
 
@@ -94,7 +94,7 @@ sub plugin {
     Module::Load::load($plugin_pkg);
 
     if ( defined $plugin_version ) {
-        $self->log_fatal("Not a valid version '$plugin_version'") if !version::is_lax($plugin_version);
+        $self->log_fatal("Not a valid version '$plugin_version'")                                                        if !version::is_lax($plugin_version);
         $self->log_fatal( "$plugin_pkg version $plugin_version required--this is only version " . $plugin_pkg->VERSION ) if version->parse( $plugin_pkg->VERSION ) < version->parse($plugin_version);
     }
 
@@ -299,7 +299,7 @@ sub _global_keyval {    ## no critic  (Subroutines::RequireFinalReturn)
     my ( $self, $key, $value ) = @_;
 
     if ( $key eq ':version' ) {
-        $self->log_fatal("Not a valid version '$value'") if !version::is_lax($value);
+        $self->log_fatal("Not a valid version '$value'")                                                           if !version::is_lax($value);
         $self->log_fatal( __PACKAGE__ . " version $value required--this is only version " . __PACKAGE__->VERSION ) if version->parse( __PACKAGE__->VERSION ) < version->parse($value);
         return;
     }
@@ -390,7 +390,7 @@ sub _load_default_config {
 
       FILE:
         for my $file ( '.xtfilesrc', 'xtfiles.ini' ) {
-            next FILE if !-e $file;
+            next FILE                                                                      if !-e $file;
             $self->log_fatal("Multiple default config files found: '$config' and '$file'") if defined $config;
             $config = $file;
         }

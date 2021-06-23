@@ -9,7 +9,7 @@ our $VERSION = '0.002';
 use Class::Tiny 1 qw(name);
 
 use overload (
-    q{""}    => sub    { shift->name },
+    q{""}    => sub { shift->name },
     bool     => sub () { return 1 },
     fallback => 1,
 );

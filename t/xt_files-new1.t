@@ -21,7 +21,7 @@ isa_ok( $obj, CLASS(), 'new returned object' );
 
 is( CLASS()->_is_initialized, undef, '... does not initialize the singleton' );
 
-is_deeply( $obj->{_file}, {},     '... _file is an empty hash ref' );
+is_deeply( $obj->{_file},     {}, '... _file is an empty hash ref' );
 is_deeply( $obj->{_excludes}, [], '... _excludes is an empty array ref' );
 
 #

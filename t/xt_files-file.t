@@ -27,7 +27,7 @@ $obj->{_file}->{'hello'} = 'world';
 is( $obj->file('hello'), 'world', 'file returns the file obj if it does exist' );
 
 is( $obj->file( 'hello', undef ), undef, 'file(name, undef) removes an entry' );
-is( $obj->file('hello'), undef, 'file returns undef if the file does not exist' );
+is( $obj->file('hello'),          undef, 'file returns undef if the file does not exist' );
 ok( exists $obj->{_file}->{'hello'}, q{entry for file 'hello' still exists} );
 
 my $file_obj = XT::Files::File->new( name => 'hello' );

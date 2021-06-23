@@ -19,7 +19,7 @@ sub BUILD {
     my ( $self, $args ) = @_;
 
     my $xtf = $self->xtf;
-    Carp::croak 'xtf attribute required' if !defined $xtf;
+    Carp::croak 'xtf attribute required'             if !defined $xtf;
     Carp::croak q{'xtf' is not of class 'XT::Files'} if !defined Scalar::Util::blessed($xtf) || !$xtf->isa('XT::Files');
 
     if ( !defined $self->name ) {

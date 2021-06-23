@@ -21,7 +21,7 @@ isa_ok( $obj, CLASS(), 'initialize returned object' );
 
 is( CLASS()->_is_initialized(), 1, '... and initializes the singleton' );
 
-is_deeply( $obj->{_file}, {},     '... _file is an empty hash ref' );
+is_deeply( $obj->{_file},     {}, '... _file is an empty hash ref' );
 is_deeply( $obj->{_excludes}, [], '... _excludes is an empty array ref' );
 
 like( exception { CLASS()->initialize( -config => undef ); }, qr{XT::Files is already initialized}, 'calling initialize twice throws an exception' );

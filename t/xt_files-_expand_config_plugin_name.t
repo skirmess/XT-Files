@@ -18,8 +18,8 @@ is( CLASS()->_is_initialized, undef, 'singleton is not initialized' );
 
 my $obj = CLASS()->new( -config => undef );
 
-is( $obj->_expand_config_plugin_name('XaYbZc'), 'XT::Files::Plugin::XaYbZc', 'package name is correctly created' );
-is( $obj->_expand_config_plugin_name('=XaYbZcd'), 'XaYbZcd', 'package name is correctly created' );
+is( $obj->_expand_config_plugin_name('XaYbZc'),   'XT::Files::Plugin::XaYbZc', 'package name is correctly created' );
+is( $obj->_expand_config_plugin_name('=XaYbZcd'), 'XaYbZcd',                   'package name is correctly created' );
 
 test_out(q{# [XT::Files] '/tmp/abc' is not a valid plugin name});
 my $output = exception { $obj->_expand_config_plugin_name('/tmp/abc') };

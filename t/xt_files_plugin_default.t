@@ -27,7 +27,7 @@ isa_ok( $obj, CLASS(), 'new returned object' );
 
 is( $obj->run( [ [ dirs => 0 ], [ excludes => 0 ] ] ), undef, 'run returns undef' );
 is_deeply( $xtf->{_excludes}, [], 'no excludes are configured' );
-is_deeply( $xtf->{_file}, {},     'no files are found' );
+is_deeply( $xtf->{_file},     {}, 'no files are found' );
 
 my $expected_output = '[' . CLASS() . q{] Invalid configuration option 'hello = world' for plugin 'Default'};
 test_out("# $expected_output");
@@ -36,11 +36,11 @@ test_test('correct error message');
 like( $output, qr{\Q$expected_output\E}, 'run dies if an invalid argument is given' );
 
 is_deeply( $xtf->{_excludes}, [], 'no excludes are configured' );
-is_deeply( $xtf->{_file}, {},     'no files are found' );
+is_deeply( $xtf->{_file},     {}, 'no files are found' );
 
 is( $obj->run( [ [ dirs => 0 ] ] ), undef, 'run returns undef' );
 is_deeply( $xtf->{_excludes}, [ q{[.]swp$}, q{[.]bak$}, q{~$} ], 'default excludes are configured' );
-is_deeply( $xtf->{_file}, {}, 'no files are found' );
+is_deeply( $xtf->{_file},     {},                                'no files are found' );
 
 #
 done_testing();
