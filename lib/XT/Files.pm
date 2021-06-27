@@ -17,7 +17,7 @@ use File::Basename ();
 use File::Find     ();
 use Module::Load   ();
 use Scalar::Util   ();
-use version 0.77   ();
+use version 0.81   ();
 
 use XT::Files::File;
 

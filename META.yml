@@ -72,7 +72,7 @@ requires:
   parent: '0'
   perl: '5.006'
   strict: '0'
-  version: '0.77'
+  version: '0.81'
   warnings: '0'
 resources:
   bugtracker: https://github.com/skirmess/XT-Files/issues

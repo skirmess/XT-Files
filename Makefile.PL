@@ -32,7 +32,7 @@ my %WriteMakefileArgs = (
     "overload" => 0,
     "parent" => 0,
     "strict" => 0,
-    "version" => "0.77",
+    "version" => "0.81",
     "warnings" => 0
   },
   "TEST_REQUIRES" => {
@@ -70,7 +70,7 @@ my %FallbackPrereqs = (
   "overload" => 0,
   "parent" => 0,
   "strict" => 0,
-  "version" => "0.77",
+  "version" => "0.81",
   "warnings" => 0
 );
 

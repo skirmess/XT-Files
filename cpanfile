@@ -14,7 +14,7 @@ requires 'overload';
 requires 'parent';
 requires 'perl', '5.006';
 requires 'strict';
-requires 'version', '0.77';
+requires 'version', '0.81';
 requires 'warnings';
 
 on configure => sub {
