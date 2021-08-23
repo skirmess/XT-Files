@@ -1,4 +1,4 @@
-package XT::Files::Plugin::lib;    ## no critic (NamingConventions::Capitalization)
+package XT::Files::Plugin::lib;
 
 use 5.006;
 use strict;

@@ -4,7 +4,6 @@
       "Sven Kirmess <sven.kirmess@kzone.ch>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 6.020, CPAN::Meta::Converter version 2.150010",
    "license" : [
       "freebsd"
    ],
@@ -60,48 +59,6 @@
          }
       }
    },
-   "provides" : {
-      "Test::XTFiles" : {
-         "file" : "lib/Test/XTFiles.pm",
-         "version" : "0.002"
-      },
-      "XT::Files" : {
-         "file" : "lib/XT/Files.pm",
-         "version" : "0.002"
-      },
-      "XT::Files::File" : {
-         "file" : "lib/XT/Files/File.pm",
-         "version" : "0.002"
-      },
-      "XT::Files::Plugin" : {
-         "file" : "lib/XT/Files/Plugin.pm",
-         "version" : "0.002"
-      },
-      "XT::Files::Plugin::Default" : {
-         "file" : "lib/XT/Files/Plugin/Default.pm",
-         "version" : "0.002"
-      },
-      "XT::Files::Plugin::Dirs" : {
-         "file" : "lib/XT/Files/Plugin/Dirs.pm",
-         "version" : "0.002"
-      },
-      "XT::Files::Plugin::Excludes" : {
-         "file" : "lib/XT/Files/Plugin/Excludes.pm",
-         "version" : "0.002"
-      },
-      "XT::Files::Plugin::Files" : {
-         "file" : "lib/XT/Files/Plugin/Files.pm",
-         "version" : "0.002"
-      },
-      "XT::Files::Plugin::lib" : {
-         "file" : "lib/XT/Files/Plugin/lib.pm",
-         "version" : "0.002"
-      },
-      "XT::Files::Role::Logger" : {
-         "file" : "lib/XT/Files/Role/Logger.pm",
-         "version" : "0.002"
-      }
-   },
    "release_status" : "stable",
    "resources" : {
       "bugtracker" : {
@@ -115,8 +72,6 @@
       }
    },
    "version" : "0.002",
-   "x_generated_by_perl" : "v5.24.0",
-   "x_serialization_backend" : "Cpanel::JSON::XS version 3.0231",
    "x_spdx_expression" : "BSD-2-Clause-FreeBSD"
 }
 

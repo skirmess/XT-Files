@@ -153,7 +153,7 @@ is undefined.
 
 Writing an author test with `XT::Files` support is straightforward. All you
 have to do is decide what kind of files your author test is going to test and
-request these files from [Test::XTFiles](https://metacpan.org/pod/Test::XTFiles):
+request these files from [Test::XTFiles](https://metacpan.org/pod/Test%3A%3AXTFiles):
 
     use Test::XTFiles;
 
@@ -220,15 +220,15 @@ arguments if it does not. Then returns the singleton.
 
 This method silently discards all arguments. If the singleton does not exist,
 it will always use the default configuration which is the `XT::Files` config
-file or, if that does not exist, the [XT::Files::Plugin::Default](https://metacpan.org/pod/XT::Files::Plugin::Default) plugin.
+file or, if that does not exist, the [XT::Files::Plugin::Default](https://metacpan.org/pod/XT%3A%3AFiles%3A%3APlugin%3A%3ADefault) plugin.
 
-This is the method that is called by [Test::XTFiles](https://metacpan.org/pod/Test::XTFiles)'s `new` method.
+This is the method that is called by [Test::XTFiles](https://metacpan.org/pod/Test%3A%3AXTFiles)'s `new` method.
 
 ## files
 
-Returns all files to be tested as [XT::Files::File](https://metacpan.org/pod/XT::Files::File) objects.
+Returns all files to be tested as [XT::Files::File](https://metacpan.org/pod/XT%3A%3AFiles%3A%3AFile) objects.
 
-You should probably use one or multiple of the methods of [Test::XTFiles](https://metacpan.org/pod/Test::XTFiles)
+You should probably use one or multiple of the methods of [Test::XTFiles](https://metacpan.org/pod/Test%3A%3AXTFiles)
 if you need to obtain a list of files to be tested, either in a `Test`
 test or in a `.t` test file.
 
@@ -249,7 +249,7 @@ script. Use this method to add directories like `bin` or `script`.
 
 If you have a directory that contains Perl scripts and other files, add them
 selectively with `bin_file` from within your `.t` test file or use the
-[XT::Files::Plugin::Files](https://metacpan.org/pod/XT::Files::Plugin::Files) plugin from your configuration file.
+[XT::Files::Plugin::Files](https://metacpan.org/pod/XT%3A%3AFiles%3A%3APlugin%3A%3AFiles) plugin from your configuration file.
 
 ## module\_dir( DIRECTORY )
 
@@ -309,7 +309,7 @@ entry is replaced with a new entry.
 Returns the file entry for FILENAME when called with a single argument.
 
 With two arguments, the FILE OBJECT must either be `undef` or a
-[XT::Files::File](https://metacpan.org/pod/XT::Files::File) object.
+[XT::Files::File](https://metacpan.org/pod/XT%3A%3AFiles%3A%3AFile) object.
 
 You should probably use one of the existing `*_file` methods to add new
 files but this method can be used to e.g. add a modulino.
@@ -329,7 +329,7 @@ If the name starts with a `=`, the leading `=` is removed and the remaining
 string is used as package name. Otherwise `XT::Files::Plugin::` is prepended
 to the string and this is used as package name.
 
-The `plugin` method uses [Module::Load](https://metacpan.org/pod/Module::Load) to load the plugin. If a VERSION
+The `plugin` method uses [Module::Load](https://metacpan.org/pod/Module%3A%3ALoad) to load the plugin. If a VERSION
 is defined it checks that [version](https://metacpan.org/pod/version)s `parse` of the VERSION isn't lower
 then the plugins version. VERSION can be undef which means every version is
 accepted.
@@ -345,7 +345,7 @@ After that it calls the plugins `run` method and passes it the KEYVALS\_REF.
 
 ## Example 1 Use a test that supports `XT::Files` with default config
 
-Because the [Test::Pod::Links](https://metacpan.org/pod/Test::Pod::Links) supports `XT::Files` we can just use the
+Because the [Test::Pod::Links](https://metacpan.org/pod/Test%3A%3APod%3A%3ALinks) supports `XT::Files` we can just use the
 following two lines for our author test `.t` file.
 
     use Test::Pod::Links 0.003;
@@ -355,7 +355,7 @@ following two lines for our author test `.t` file.
 When `Test::Pod::Links` asks `XT::Files` for all the pod files to check,
 `XT::Files` checks if the distribution has an `XT::Files` config file.
 If the config file exists it is parsed and processed, otherwise the
-[XT::Files::Plugin::Default](https://metacpan.org/pod/XT::Files::Plugin::Default) is loaded to load the default `XT::Files`
+[XT::Files::Plugin::Default](https://metacpan.org/pod/XT%3A%3AFiles%3A%3APlugin%3A%3ADefault) is loaded to load the default `XT::Files`
 configuration.
 
 ## Example 2 Use a test that supports XT::Files with default config files
@@ -379,13 +379,13 @@ The run the test the same as in Example 1
     all_pod_files_ok();
 
 But this time the file list is generated depending on your config file and not
-on the defaults from the [XT::Files::Plugin::Default](https://metacpan.org/pod/XT::Files::Plugin::Default) plugin.
+on the defaults from the [XT::Files::Plugin::Default](https://metacpan.org/pod/XT%3A%3AFiles%3A%3APlugin%3A%3ADefault) plugin.
 
 ## Example 3 Use a test that supports `XT::Files` but ignore default config file
 
 The following example lets you programmatically configure the `XT::Files`
 file list omitting a config file, if it exists and only loading the excludes
-config from the [XT::Files::Plugin::Default](https://metacpan.org/pod/XT::Files::Plugin::Default) plugin.
+config from the [XT::Files::Plugin::Default](https://metacpan.org/pod/XT%3A%3AFiles%3A%3APlugin%3A%3ADefault) plugin.
 
 We recommend that you always configure `XT::Files` with a config file but
 this example could be used if some special logic is required.
@@ -407,7 +407,7 @@ this example could be used if some special logic is required.
 ## Example 4 Use a test that supports `XT::Files` with the config file but add test directory
 
 This initializes the config, either from the config file or, if no config
-file exists, with the [XT::Files::Plugin::Default](https://metacpan.org/pod/XT::Files::Plugin::Default) plugin. Then it adds
+file exists, with the [XT::Files::Plugin::Default](https://metacpan.org/pod/XT%3A%3AFiles%3A%3APlugin%3A%3ADefault) plugin. Then it adds
 an additional two directories. This can be used if you want to check some
 files with only some author tests.
 
@@ -451,15 +451,15 @@ This specifies only the default config file. This file is only used if
 
 # SEE ALSO
 
-[Test::XTFiles](https://metacpan.org/pod/Test::XTFiles),
-[XT::Files::File](https://metacpan.org/pod/XT::Files::File),
-[XT::Files::Plugin::Default](https://metacpan.org/pod/XT::Files::Plugin::Default),
-[XT::Files::Plugin::Dirs](https://metacpan.org/pod/XT::Files::Plugin::Dirs),
-[XT::Files::Plugin::Excludes](https://metacpan.org/pod/XT::Files::Plugin::Excludes),
-[XT::Files::Plugin::Files](https://metacpan.org/pod/XT::Files::Plugin::Files),
-[XT::Files::Plugin::lib](https://metacpan.org/pod/XT::Files::Plugin::lib),
-[XT::Files::Plugin](https://metacpan.org/pod/XT::Files::Plugin),
-[XT::Files::Role::Logger](https://metacpan.org/pod/XT::Files::Role::Logger)
+[Test::XTFiles](https://metacpan.org/pod/Test%3A%3AXTFiles),
+[XT::Files::File](https://metacpan.org/pod/XT%3A%3AFiles%3A%3AFile),
+[XT::Files::Plugin::Default](https://metacpan.org/pod/XT%3A%3AFiles%3A%3APlugin%3A%3ADefault),
+[XT::Files::Plugin::Dirs](https://metacpan.org/pod/XT%3A%3AFiles%3A%3APlugin%3A%3ADirs),
+[XT::Files::Plugin::Excludes](https://metacpan.org/pod/XT%3A%3AFiles%3A%3APlugin%3A%3AExcludes),
+[XT::Files::Plugin::Files](https://metacpan.org/pod/XT%3A%3AFiles%3A%3APlugin%3A%3AFiles),
+[XT::Files::Plugin::lib](https://metacpan.org/pod/XT%3A%3AFiles%3A%3APlugin%3A%3Alib),
+[XT::Files::Plugin](https://metacpan.org/pod/XT%3A%3AFiles%3A%3APlugin),
+[XT::Files::Role::Logger](https://metacpan.org/pod/XT%3A%3AFiles%3A%3ARole%3A%3ALogger)
 
 # SUPPORT
 
