@@ -70,9 +70,9 @@ SKIP: {
     mkdir 'bin2/b' or die "mkdir failed: $!";
     symlink '../bin2/b', 'bin/b' or die "symlink failed: $!";
 
-    open my $fh, '>', 'bin/hello.txt' or die "open failed: $!";
-    open $fh, '>', 'bin/a/world.txt'  or die "open failed: $!";
-    open $fh, '>', 'bin2/b/world.txt' or die "open failed: $!";
+    open my $fh, '>', 'bin/hello.txt'    or die "open failed: $!";
+    open $fh,    '>', 'bin/a/world.txt'  or die "open failed: $!";
+    open $fh,    '>', 'bin2/b/world.txt' or die "open failed: $!";
 
     symlink 'world.txt', 'bin/a/world2.txt' or die "symlink failed: $!";
 
