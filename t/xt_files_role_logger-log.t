@@ -8,7 +8,6 @@ use Test::Builder::Tester;
 use Test::Fatal;
 use Test::More 0.88;
 
-use Class::Tiny 1;
 use Role::Tiny::With;
 
 with 'XT::Files::Role::Logger';
@@ -17,6 +16,13 @@ delete $ENV{XT_FILES_DEBUG};
 delete $ENV{XT_FILES_DEFAULT_CONFIG_FILE};
 
 my $prefix = 'PrEfIx';
+
+sub new {
+    my $class = shift;
+
+    my $self = bless {}, $class;
+    return $self;
+}
 
 sub log_prefix {
     return $prefix;

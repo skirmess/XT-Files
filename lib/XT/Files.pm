@@ -6,8 +6,6 @@ use warnings;
 
 our $VERSION = '0.002';
 
-use Class::Tiny 1;
-
 use Role::Tiny::With ();
 
 Role::Tiny::With::with 'XT::Files::Role::Logger';
@@ -27,11 +25,27 @@ use constant MODULE_NAME_RX => qr{ ^ [A-Za-z_] [0-9A-Za-z_]* (?: :: [0-9A-Za-z_]
 # CLASS METHODS
 #
 
-sub BUILD {
-    my ( $self, $args ) = @_;
+sub new {
+    my $class = shift;
 
-    $self->{_excludes} = [];
-    $self->{_file}     = {};
+    my $args;
+    if (   @_ == 1
+        && defined Scalar::Util::reftype $_[0]
+        && Scalar::Util::reftype $_[0] eq Scalar::Util::reftype {} )
+    {
+        $args = $_[0];
+    }
+    elsif ( @_ % 2 == 0 ) {
+        $args = {@_};
+    }
+    else {
+        Carp::croak "$class->new() got an odd number of arguments";
+    }
+
+    my $self = bless {
+        _excludes => [],
+        _file     => {},
+    }, $class;
 
     if ( exists $args->{'-config'} ) {
         if ( defined $args->{'-config'} ) {
@@ -46,7 +60,7 @@ sub BUILD {
         $self->_load_default_config();
     }
 
-    return;
+    return $self;
 }
 
 {

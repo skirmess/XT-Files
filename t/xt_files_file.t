@@ -13,7 +13,8 @@ delete $ENV{XT_FILES_DEFAULT_CONFIG_FILE};
 
 use constant CLASS => 'XT::Files::File';
 
-like( exception { CLASS()->new() }, q{/name attribute required/}, q{new throws an exception if 'name' argument is missing} );
+like( exception { CLASS()->new() },   qr{\Qname attribute required\E},                               q{new throws an exception if 'name' argument is missing} );
+like( exception { CLASS()->new(77) }, qr{\QXT::Files::File->new() got an odd number of arguments\E}, q{new throws an exception if it gets an odd number of arguments} );
 
 {
     for my $name ( 'test 1 2 3', '0', q{} ) {

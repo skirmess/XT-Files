@@ -6,8 +6,6 @@ use warnings;
 
 our $VERSION = '0.002';
 
-use Class::Tiny 1 qw(name xtf);
-
 use Role::Tiny::With ();
 
 Role::Tiny::With::with 'XT::Files::Role::Logger';
@@ -15,24 +13,55 @@ Role::Tiny::With::with 'XT::Files::Role::Logger';
 use Carp         ();
 use Scalar::Util ();
 
-sub BUILD {
-    my ( $self, $args ) = @_;
+sub new {
+    my $class = shift;
+
+    my $args;
+    if (   @_ == 1
+        && defined Scalar::Util::reftype $_[0]
+        && Scalar::Util::reftype $_[0] eq Scalar::Util::reftype {} )
+    {
+        $args = $_[0];
+    }
+    elsif ( @_ % 2 == 0 ) {
+        $args = {@_};
+    }
+    else {
+        Carp::croak "$class->new() got an odd number of arguments";
+    }
+
+    my $self = bless {
+        name => $args->{name},
+        xtf  => $args->{xtf},
+    }, $class;
 
     my $xtf = $self->xtf;
     Carp::croak 'xtf attribute required'             if !defined $xtf;
     Carp::croak q{'xtf' is not of class 'XT::Files'} if !defined Scalar::Util::blessed($xtf) || !$xtf->isa('XT::Files');
 
     if ( !defined $self->name ) {
-        $self->name( Scalar::Util::blessed($self) );
+        $self->{name} = Scalar::Util::blessed($self);
     }
 
-    return;
+    return $self;
 }
 
 sub log_prefix {
     my ($self) = @_;
 
     return $self->name;
+}
+
+sub name {
+    my ($self) = @_;
+
+    return $self->{name};
+}
+
+sub xtf {
+    my ($self) = @_;
+
+    return $self->{xtf};
 }
 
 1;
@@ -89,9 +118,9 @@ would result in your plugin being called like so
 
 Requires the C<xtf> argument.
 
-If you write your own plugin, please do not overwrite C<new>. Use the
-C<BUILD> method instead. Please see C<Class::Tiny> for further
-information on the object system.
+=head2 name
+
+Returns the name of the plugin.
 
 =head2 xtf
 
@@ -99,7 +128,7 @@ Returns the L<XT::Files> object that was passed with C<new>.
 
 =head1 SEE ALSO
 
-L<XT::Files>, L<Class::Tiny>
+L<XT::Files>
 
 =head1 SUPPORT
 

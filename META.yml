@@ -26,7 +26,6 @@ no_index:
     - xt
 requires:
   Carp: '0'
-  Class::Tiny: '1'
   Cwd: '0'
   File::Basename: '0'
   File::Find: '0'

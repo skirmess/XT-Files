@@ -6,27 +6,42 @@ use warnings;
 
 our $VERSION = '0.002';
 
-use Class::Tiny 1 qw(name);
-
 use overload (
     q{""}    => sub { shift->name },
     bool     => sub () { return 1 },
     fallback => 1,
 );
 
-use Carp ();
+use Carp         ();
+use Scalar::Util ();
 
-sub BUILD {
-    my ( $self, $args ) = @_;
+sub new {
+    my $class = shift;
 
-    Carp::croak 'name attribute required' if !defined $self->name;
+    my $args;
+    if (   @_ == 1
+        && defined Scalar::Util::reftype $_[0]
+        && Scalar::Util::reftype $_[0] eq Scalar::Util::reftype {} )
+    {
+        $args = $_[0];
+    }
+    elsif ( @_ % 2 == 0 ) {
+        $args = {@_};
+    }
+    else {
+        Carp::croak "$class->new() got an odd number of arguments";
+    }
 
-    $self->{_module} = $args->{is_module} ? 1 : q{};
-    $self->{_pod}    = $args->{is_pod}    ? 1 : q{};
-    $self->{_script} = $args->{is_script} ? 1 : q{};
-    $self->{_test}   = $args->{is_test}   ? 1 : q{};
+    Carp::croak 'name attribute required' if !defined $args->{name};
+    my $self = bless {
+        name    => $args->{name},
+        _module => !!$args->{is_module},
+        _pod    => !!$args->{is_pod},
+        _script => !!$args->{is_script},
+        _test   => !!$args->{is_test},
+    }, $class;
 
-    return;
+    return $self;
 }
 
 sub is_module {
@@ -51,6 +66,12 @@ sub is_test {
     my ($self) = @_;
 
     return $self->{_test} ? 1 : q{};
+}
+
+sub name {
+    my ($self) = @_;
+
+    return $self->{name};
 }
 
 1;

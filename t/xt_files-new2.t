@@ -24,8 +24,11 @@ chdir 'corpus/dist1' or die "chdir failed: $!";
 
 is( CLASS()->_is_initialized, undef, 'singleton is not initialized' );
 
+my $output = exception { CLASS()->new(77) };
+like( $output, qr{\QXT::Files->new() got an odd number of arguments\E}, 'new dies with an odd number of arguments' );
+
 test_out(qr{[#]\Q [XT::Files] Cannot read file 'non existing file.txt': \E.*\n?});
-my $output = exception { CLASS()->new( -config => 'non existing file.txt' ) };
+$output = exception { CLASS()->new( -config => 'non existing file.txt' ) };
 test_test('correct error message');
 like( $output, q{/Cannot read file 'non existing file.txt': /}, 'new dies if the config file cannot be read' );
 
@@ -37,7 +40,7 @@ like( $output, '/Syntax error in config on line 1/', 'new dies on invalid config
 
 $config = '=hello';
 test_out('# [XT::Files] Syntax error in config on line 1');
-$output = exception { CLASS()->new( -config => \$config ) };
+$output = exception { CLASS()->new( { -config => \$config } ) };
 test_test('correct error message');
 like( $output, '/Syntax error in config on line 1/', 'new dies on invalid config' );
 

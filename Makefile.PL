@@ -16,7 +16,6 @@ my %WriteMakefileArgs = (
     NAME             => 'XT::Files',
     PREREQ_PM        => {
         Carp               => 0,
-        'Class::Tiny'      => '1',
         Cwd                => 0,
         'File::Basename'   => 0,
         'File::Find'       => 0,
@@ -48,7 +47,6 @@ my %WriteMakefileArgs = (
 
 my %FallbackPrereqs = (
     Carp                    => 0,
-    'Class::Tiny'           => '1',
     Cwd                     => 0,
     'File::Basename'        => 0,
     'File::Find'            => 0,

@@ -8,8 +8,24 @@ our $VERSION = '0.001';
 
 use parent 'XT::Files::Plugin';
 
-sub BUILD {
-    my ( $self, $args ) = @_;
+sub new {
+    my $class = shift;
+
+    my $args;
+    if (   @_ == 1
+        && defined Scalar::Util::reftype $_[0]
+        && Scalar::Util::reftype $_[0] eq Scalar::Util::reftype {} )
+    {
+        $args = $_[0];
+    }
+    elsif ( @_ % 2 == 0 ) {
+        $args = {@_};
+    }
+    else {
+        Carp::croak "$class->new() got an odd number of arguments";
+    }
+
+    my $self = $class->SUPER::new(@_);
 
     my $report_file = $ENV{REPORT_FILE_BASE};
     die 'Environment variable REPORT_FILE not set' if !defined $report_file;

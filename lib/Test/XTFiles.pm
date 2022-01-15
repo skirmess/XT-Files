@@ -6,20 +6,20 @@ use warnings;
 
 our $VERSION = '0.002';
 
-use Class::Tiny 1;
-
 use XT::Files;
 
 #
 # CLASS METHODS
 #
 
-sub BUILD {
-    my ( $self, $args ) = @_;
+sub new {
+    my $class = shift;
 
-    @{ $self->{_files} } = XT::Files->instance->files;
+    my $self = bless {
+        _files => [ XT::Files->instance->files ],
+    }, $class;
 
-    return;
+    return $self;
 }
 
 #
