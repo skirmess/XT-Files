@@ -10,13 +10,11 @@ use XT::Files;
 
 delete $ENV{XT_FILES_DEFAULT_CONFIG_FILE};
 
-use constant CLASS => 'XT::Files';
-
 note('test_file(FILE)');
 
-is( CLASS()->_is_initialized, undef, 'singleton is not initialized' );
+is( XT::Files->_is_initialized, undef, 'singleton is not initialized' );
 
-my $obj = CLASS()->new( -config => undef );
+my $obj = XT::Files->new( -config => undef );
 
 is( $obj->file('hello'), undef, 'file hello does not exist' );
 
@@ -33,7 +31,7 @@ ok( $file->is_test,    'is_test is true' );
 
 note('test_file(FILE, DIR)');
 
-$obj = CLASS()->new( -config => undef );
+$obj = XT::Files->new( -config => undef );
 
 is( $obj->file('hello'), undef, 'file hello does not exist' );
 

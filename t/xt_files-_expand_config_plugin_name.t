@@ -12,11 +12,9 @@ use XT::Files;
 
 delete $ENV{XT_FILES_DEFAULT_CONFIG_FILE};
 
-use constant CLASS => 'XT::Files';
+is( XT::Files->_is_initialized, undef, 'singleton is not initialized' );
 
-is( CLASS()->_is_initialized, undef, 'singleton is not initialized' );
-
-my $obj = CLASS()->new( -config => undef );
+my $obj = XT::Files->new( -config => undef );
 
 is( $obj->_expand_config_plugin_name('XaYbZc'),   'XT::Files::Plugin::XaYbZc', 'package name is correctly created' );
 is( $obj->_expand_config_plugin_name('=XaYbZcd'), 'XaYbZcd',                   'package name is correctly created' );

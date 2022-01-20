@@ -8,29 +8,18 @@ use Test::Builder::Tester;
 use Test::Fatal;
 use Test::More 0.88;
 
-use Role::Tiny::With;
-
-with 'XT::Files::Role::Logger';
+use XT::Files::Logger;
 
 delete $ENV{XT_FILES_DEBUG};
 delete $ENV{XT_FILES_DEFAULT_CONFIG_FILE};
 
 my $prefix = 'PrEfIx';
 
-sub new {
-    my $class = shift;
-
-    my $self = bless {}, $class;
-    return $self;
-}
-
-sub log_prefix {
-    return $prefix;
-}
-
 note(q{log('hello world')});
 {
-    my $obj = main->new;
+    my $obj = XT::Files::Logger->new( name => $prefix );
+    isa_ok( $obj, 'XT::Files::Logger', "new(name => $prefix) returns an XT::Files::Logger object" );
+    is( $obj->{_name}, $prefix, '... with the correct name' );
 
     test_out("# [$prefix] hello world");
     my $result = $obj->log('hello world');
@@ -45,7 +34,9 @@ note(q{log('hello world')});
 
 note(q{log_debug('hello world')});
 {
-    my $obj = main->new;
+    my $obj = XT::Files::Logger->new( { name => $prefix } );
+    isa_ok( $obj, 'XT::Files::Logger', "new({name => $prefix}) returns an XT::Files::Logger object" );
+    is( $obj->{_name}, $prefix, '... with the correct name' );
 
     # no debug output
     test_out();
@@ -65,7 +56,9 @@ note(q{log_debug('hello world')});
 
 note(q{log_fatal('hello world')});
 {
-    my $obj = main->new;
+    my $obj = XT::Files::Logger->new( name => $prefix );
+    isa_ok( $obj, 'XT::Files::Logger', "new(name => $prefix) returns an XT::Files::Logger object" );
+    is( $obj->{_name}, $prefix, '... with the correct name' );
 
     test_out("# [$prefix] hello world");
     my $output = exception { $obj->log_fatal('hello world'); };
@@ -74,6 +67,15 @@ note(q{log_fatal('hello world')});
     my $expected_die = "[$prefix] hello world at ";
     like( $output, qr{\Q$expected_die\E}, '... and expected die message' );
 
+}
+
+note('usage error');
+{
+    my $e = exception { XT::Files::Logger->new( name => $prefix, 77 ); };
+    like( $e, qr{\QXT::Files::Logger->new() got an odd number of arguments\E}, 'new throws an exception with an odd number of arguments' );
+
+    $e = exception { XT::Files::Logger->new; };
+    like( $e, qr{\Qname attribute required\E}, 'new throws an exception if name is not given' );
 }
 
 #

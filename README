@@ -350,6 +350,11 @@ USAGE
     After that it calls the plugins run method and passes it the
     KEYVALS_REF.
 
+ log, log_debug, log_fatal
+
+    Call the method with the same name of XT::Files' XT::Files::Logger
+    object.
+
 EXAMPLES
 
  Example 1 Use a test that supports XT::Files with default config

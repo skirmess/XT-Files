@@ -16,11 +16,9 @@ use XT::Files::Plugin::Files;
 
 delete $ENV{XT_FILES_DEFAULT_CONFIG_FILE};
 
-use constant CLASS => 'XT::Files::Plugin::Files';
+like( exception { XT::Files::Plugin::Files->new() }, q{/xtf attribute required/}, q{new throws an exception if 'xtf' argument is missing} );
 
-like( exception { CLASS()->new() }, q{/xtf attribute required/}, q{new throws an exception if 'xtf' argument is missing} );
-
-like( exception { CLASS()->new( xtf => 'hello world' ) }, q{/'xtf' is not of class 'XT::Files'/}, q{new throws an exception if 'xtf' argument is not an XT::Files object} );
+like( exception { XT::Files::Plugin::Files->new( xtf => 'hello world' ) }, q{/'xtf' is not of class 'XT::Files'/}, q{new throws an exception if 'xtf' argument is not an XT::Files object} );
 
 my $cwd = cwd();
 
@@ -31,13 +29,13 @@ is( XT::Files->_is_initialized, undef, 'singleton is not initialized' );
 my $xtf = XT::Files->new( -config => undef );
 is_deeply( [ $xtf->files ], [], 'no files are configured' );
 
-my $obj = CLASS()->new( xtf => $xtf );
-isa_ok( $obj, CLASS(), 'new returned object' );
+my $obj = XT::Files::Plugin::Files->new( xtf => $xtf );
+isa_ok( $obj, 'XT::Files::Plugin::Files', 'new returned object' );
 
 is( $obj->run(), undef, 'run returns undef' );
 is_deeply( [ $xtf->files ], [], 'no files are configured' );
 
-my $expected_output = '[' . CLASS() . q{] Invalid configuration option 'hello = world' for plugin 'Files'};
+my $expected_output = q{[XT::Files::Plugin::Files] Invalid configuration option 'hello = world' for plugin 'Files'};
 test_out("# $expected_output");
 my $output = exception { $obj->run( [ [ hello => 'world' ] ] ) };
 test_test('correct error message');
@@ -100,8 +98,8 @@ SKIP: {
 $xtf = XT::Files->new( -config => undef );
 is_deeply( [ $xtf->files ], [], 'no files are configured' );
 
-$obj = CLASS()->new( xtf => $xtf );
-isa_ok( $obj, CLASS(), 'new returned object' );
+$obj = XT::Files::Plugin::Files->new( xtf => $xtf );
+isa_ok( $obj, 'XT::Files::Plugin::Files', 'new returned object' );
 
 is( $obj->run( [ [ bin => 'non-existing-file' ], [ bin => 'dir' ], [ bin => 'symlink' ] ] ), undef, 'run returns undef' );
 

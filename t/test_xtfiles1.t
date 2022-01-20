@@ -11,14 +11,12 @@ use XT::Files;
 
 delete $ENV{XT_FILES_DEFAULT_CONFIG_FILE};
 
-use constant CLASS => 'Test::XTFiles';
-
 chdir 'corpus/empty' or die "chdir failed: $!";
 
 is( XT::Files->_is_initialized, undef, 'singleton is not initialized' );
 
-my $obj = CLASS()->new();
-isa_ok( $obj, CLASS(), 'new returned object' );
+my $obj = Test::XTFiles->new();
+isa_ok( $obj, 'Test::XTFiles', 'new returned object' );
 
 ok( XT::Files->_is_initialized(), '... and initializes the singleton' );
 

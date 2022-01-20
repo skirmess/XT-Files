@@ -10,13 +10,11 @@ use XT::Files;
 
 delete $ENV{XT_FILES_DEFAULT_CONFIG_FILE};
 
-use constant CLASS => 'XT::Files';
-
 note('excludes');
 
-is( CLASS()->_is_initialized, undef, 'singleton is not initialized' );
+is( XT::Files->_is_initialized, undef, 'singleton is not initialized' );
 
-my $obj = CLASS()->new( -config => undef );
+my $obj = XT::Files->new( -config => undef );
 
 is_deeply( $obj->{_excludes}, [], '_excludes is initialized to an empty array ref' );
 

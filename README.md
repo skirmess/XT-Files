@@ -341,6 +341,11 @@ argument and expects an object of the plugin in return.
 
 After that it calls the plugins `run` method and passes it the KEYVALS\_REF.
 
+## log, log\_debug, log\_fatal
+
+Call the method with the same name of `XT::Files`' [XT::Files::Logger](https://metacpan.org/pod/XT%3A%3AFiles%3A%3ALogger)
+object.
+
 # EXAMPLES
 
 ## Example 1 Use a test that supports `XT::Files` with default config

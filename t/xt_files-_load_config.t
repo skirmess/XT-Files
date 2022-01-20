@@ -12,14 +12,12 @@ use XT::Files;
 
 delete $ENV{XT_FILES_DEFAULT_CONFIG_FILE};
 
-use constant CLASS => 'XT::Files';
-
 chdir 'corpus/dist1' or die "chdir failed: $!";
 
-is( CLASS()->_is_initialized, undef, 'singleton is not initialized' );
+is( XT::Files->_is_initialized, undef, 'singleton is not initialized' );
 
-my $obj = CLASS()->new( -config => undef );
-isa_ok( $obj, CLASS(), 'new returned object' );
+my $obj = XT::Files->new( -config => undef );
+isa_ok( $obj, 'XT::Files', 'new returned object' );
 
 test_out(qr{[#]\Q [XT::Files] Cannot read file 'non existing file.txt': \E.*\n?});
 my $output = exception { $obj->_load_config('non existing file.txt') };

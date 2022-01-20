@@ -10,3 +10,4 @@ flowcontrol = BAIL_OUT die skip
 terminal_funcs = BAIL_OUT
 [-Variables::ProhibitPackageVars]
 [-Variables::RequireInitializationForLocalVars]
+[-Variables::RequireLocalizedPunctuationVars]

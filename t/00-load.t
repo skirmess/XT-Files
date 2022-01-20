@@ -14,13 +14,13 @@ my @modules = qw(
   Test::XTFiles
   XT::Files
   XT::Files::File
+  XT::Files::Logger
   XT::Files::Plugin
   XT::Files::Plugin::Default
   XT::Files::Plugin::Dirs
   XT::Files::Plugin::Excludes
   XT::Files::Plugin::Files
   XT::Files::Plugin::lib
-  XT::Files::Role::Logger
 );
 
 plan tests => scalar @modules;

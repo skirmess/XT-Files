@@ -16,11 +16,9 @@ use XT::Files::Plugin::lib;
 
 delete $ENV{XT_FILES_DEFAULT_CONFIG_FILE};
 
-use constant CLASS => 'XT::Files::Plugin::lib';
+like( exception { XT::Files::Plugin::lib->new() }, q{/xtf attribute required/}, q{new throws an exception if 'xtf' argument is missing} );
 
-like( exception { CLASS()->new() }, q{/xtf attribute required/}, q{new throws an exception if 'xtf' argument is missing} );
-
-like( exception { CLASS()->new( xtf => 'hello world' ) }, q{/'xtf' is not of class 'XT::Files'/}, q{new throws an exception if 'xtf' argument is not an XT::Files object} );
+like( exception { XT::Files::Plugin::lib->new( xtf => 'hello world' ) }, q{/'xtf' is not of class 'XT::Files'/}, q{new throws an exception if 'xtf' argument is not an XT::Files object} );
 
 my $cwd = cwd();
 
@@ -31,13 +29,13 @@ lib->import( abs_path($empty_dir) );
 my @INC_pre = @INC;
 
 my $mock = bless {}, 'XT::Files';
-my $obj  = CLASS()->new( xtf => $mock );
-isa_ok( $obj, CLASS(), 'new returned object' );
+my $obj  = XT::Files::Plugin::lib->new( xtf => $mock );
+isa_ok( $obj, 'XT::Files::Plugin::lib', 'new returned object' );
 
 is( $obj->run(), undef, 'run returns undef' );
 is_deeply( \@INC_pre, \@INC, '... and does not change @INC if no lib dir is specified' );    ## no critic (ValuesAndExpressions::RequireInterpolationOfMetachars)
 
-my $expected_output = q{[} . CLASS() . q{] Invalid configuration option 'hello = world' for plugin 'lib'};
+my $expected_output = q{[XT::Files::Plugin::lib] Invalid configuration option 'hello = world' for plugin 'lib'};
 test_out("# $expected_output");
 my $output = exception { $obj->run( [ [ hello => 'world' ] ] ) };
 test_test('correct error message');
@@ -61,7 +59,7 @@ chdir $cwd;                                                                     
 
 note('test log_prefix');
 
-$obj             = CLASS()->new( xtf => $mock, name => 'hello world' );
+$obj             = XT::Files::Plugin::lib->new( xtf => $mock, name => 'hello world' );
 $expected_output = q{[hello world] Invalid configuration option 'hello = world' for plugin 'lib'};
 test_out("# $expected_output");
 $output = exception { $obj->run( [ [ hello => 'world' ] ] ) };

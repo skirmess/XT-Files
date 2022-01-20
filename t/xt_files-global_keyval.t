@@ -12,12 +12,10 @@ use XT::Files;
 
 delete $ENV{XT_FILES_DEFAULT_CONFIG_FILE};
 
-use constant CLASS => 'XT::Files';
+is( XT::Files->_is_initialized, undef, 'singleton is not initialized' );
 
-is( CLASS()->_is_initialized, undef, 'singleton is not initialized' );
-
-my $obj = CLASS()->new( -config => undef );
-isa_ok( $obj, CLASS(), 'new(-config => undef) returned object' );
+my $obj = XT::Files->new( -config => undef );
+isa_ok( $obj, 'XT::Files', 'new(-config => undef) returned object' );
 
 test_out(q{# [XT::Files] Invalid entry 'invalid = entry'});
 my $output = exception { $obj->_global_keyval( 'invalid', 'entry' ) };

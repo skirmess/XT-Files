@@ -14,15 +14,13 @@ use XT::Files;
 
 delete $ENV{XT_FILES_DEFAULT_CONFIG_FILE};
 
-use constant CLASS => 'XT::Files';
-
 my $cwd = cwd();
 
 chdir 'corpus/dist1' or die "chdir failed: $!";
 
-is( CLASS()->_is_initialized, undef, 'singleton is not initialized' );
+is( XT::Files->_is_initialized, undef, 'singleton is not initialized' );
 
-my $obj = CLASS()->new( -config => undef );
+my $obj = XT::Files->new( -config => undef );
 
 my @files = $obj->_find_new_files('bin');
 
@@ -76,8 +74,8 @@ SKIP: {
 
     symlink 'world.txt', 'bin/a/world2.txt' or die "symlink failed: $!";
 
-    $obj = CLASS()->new( -config => undef );
-    isa_ok( $obj, CLASS(), 'new() returns a CLASS() object' );
+    $obj = XT::Files->new( -config => undef );
+    isa_ok( $obj, 'XT::Files', 'new() returns a XT::Files object' );
 
     @files = $obj->_find_new_files('bin');
 

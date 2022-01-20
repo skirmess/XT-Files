@@ -10,19 +10,19 @@ use XT::Files;
 
 delete $ENV{XT_FILES_DEFAULT_CONFIG_FILE};
 
-use constant CLASS => 'XT::Files';
-
 note('new');
 
-is( CLASS()->_is_initialized, undef, 'singleton is not initialized' );
+is( XT::Files->_is_initialized, undef, 'singleton is not initialized' );
 
-my $obj = CLASS()->new( -config => undef );
-isa_ok( $obj, CLASS(), 'new returned object' );
+my $obj = XT::Files->new( -config => undef );
+isa_ok( $obj, 'XT::Files', 'new returned object' );
 
-is( CLASS()->_is_initialized, undef, '... does not initialize the singleton' );
+is( XT::Files->_is_initialized, undef, '... does not initialize the singleton' );
 
 is_deeply( $obj->{_file},     {}, '... _file is an empty hash ref' );
 is_deeply( $obj->{_excludes}, [], '... _excludes is an empty array ref' );
+isa_ok( $obj->{_logger}, 'XT::Files::Logger' );
+is( $obj->{_logger}{_name}, 'XT::Files', '... with the correct name' );
 
 #
 done_testing();

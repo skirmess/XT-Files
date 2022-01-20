@@ -16,58 +16,56 @@ use XT::Files;
 
 delete $ENV{XT_FILES_DEFAULT_CONFIG_FILE};
 
-use constant CLASS => 'XT::Files';
-
 note('new with config');
 
 chdir 'corpus/dist1' or die "chdir failed: $!";
 
-is( CLASS()->_is_initialized, undef, 'singleton is not initialized' );
+is( XT::Files->_is_initialized, undef, 'singleton is not initialized' );
 
-my $output = exception { CLASS()->new(77) };
+my $output = exception { XT::Files->new(77) };
 like( $output, qr{\QXT::Files->new() got an odd number of arguments\E}, 'new dies with an odd number of arguments' );
 
 test_out(qr{[#]\Q [XT::Files] Cannot read file 'non existing file.txt': \E.*\n?});
-$output = exception { CLASS()->new( -config => 'non existing file.txt' ) };
+$output = exception { XT::Files->new( -config => 'non existing file.txt' ) };
 test_test('correct error message');
 like( $output, q{/Cannot read file 'non existing file.txt': /}, 'new dies if the config file cannot be read' );
 
 my $config = 'hello';
 test_out('# [XT::Files] Syntax error in config on line 1');
-$output = exception { CLASS()->new( -config => \$config ) };
+$output = exception { XT::Files->new( -config => \$config ) };
 test_test('correct error message');
 like( $output, '/Syntax error in config on line 1/', 'new dies on invalid config' );
 
 $config = '=hello';
 test_out('# [XT::Files] Syntax error in config on line 1');
-$output = exception { CLASS()->new( { -config => \$config } ) };
+$output = exception { XT::Files->new( { -config => \$config } ) };
 test_test('correct error message');
 like( $output, '/Syntax error in config on line 1/', 'new dies on invalid config' );
 
 $config = 'hello=';
 test_out('# [XT::Files] Syntax error in config on line 1');
-$output = exception { CLASS()->new( -config => \$config ) };
+$output = exception { XT::Files->new( -config => \$config ) };
 test_test('correct error message');
 like( $output, '/Syntax error in config on line 1/', 'new dies on invalid config' );
 
 $config = ':version = 99999999';
 test_out(qr{[#]\Q [XT::Files] XT::Files version 99999999 required--this is only version \E.*\n?});
-$output = exception { CLASS()->new( -config => \$config ) };
+$output = exception { XT::Files->new( -config => \$config ) };
 test_test('correct error message');
 like( $output, '/XT::Files version 99999999 required--this is only version /', '... dies if the :version is not ok' );
 
 $config = ':version=1=2 ';
 test_out(q{# [XT::Files] Not a valid version '1=2'});
-$output = exception { CLASS()->new( -config => \$config ) };
+$output = exception { XT::Files->new( -config => \$config ) };
 test_test('correct error message');
 like( $output, qr{Not a valid version '1=2'}, '... correctly splits on first equal sign' );
 
 $config = "\t# hello\n    ; world\n \t \t :version \t =\t0.001 \t \t ";
-isa_ok( CLASS()->new( -config => \$config ), CLASS(), 'new returned object' );
+isa_ok( XT::Files->new( -config => \$config ), 'XT::Files', 'new returned object' );
 
 $config = "\t[=Local::Test";
 test_out(q{# [XT::Files] Syntax error in config on line 1});
-$output = exception { CLASS()->new( -config => \$config ) };
+$output = exception { XT::Files->new( -config => \$config ) };
 test_test('correct error message');
 like( $output, '/Syntax error in config on line 1/', '... dies if the plugin section is corrupt' );
 
@@ -79,7 +77,7 @@ my $report_file_base = "$tempdir/report_" . __LINE__;
 local $ENV{REPORT_FILE_BASE} = $report_file_base;
 
 $config = "\t[=Local::Test] ";
-isa_ok( CLASS()->new( -config => \$config ), CLASS(), 'new returned object' );
+isa_ok( XT::Files->new( -config => \$config ), 'XT::Files', 'new returned object' );
 
 my $st = stat "${report_file_base}.new";
 ok( defined $st, '... new was run' );
@@ -107,7 +105,7 @@ e = f
 g h = HELLO WORLD
 CONFIG
 
-isa_ok( CLASS()->new( -config => \$config ), CLASS(), 'new returned object' );
+isa_ok( XT::Files->new( -config => \$config ), 'XT::Files', 'new returned object' );
 
 $st = stat "${report_file_base}.new";
 ok( defined $st, '... new was run' );
@@ -141,7 +139,7 @@ x = y
 :v = w
 CONFIG
 
-isa_ok( CLASS()->new( -config => \$config ), CLASS(), 'new returned object' );
+isa_ok( XT::Files->new( -config => \$config ), 'XT::Files', 'new returned object' );
 
 $st = stat "${report_file_base}.new";
 ok( defined $st, '... new was run' );

@@ -13,18 +13,16 @@ use XT::Files;
 
 delete $ENV{XT_FILES_DEFAULT_CONFIG_FILE};
 
-use constant CLASS => 'XT::Files';
-
 chdir 'corpus/dist1' or die "chdir failed: $!";
 
-is( CLASS()->_is_initialized, undef, 'singleton is not initialized' );
+is( XT::Files->_is_initialized, undef, 'singleton is not initialized' );
 
 my $tempdir          = File::Temp->newdir();
 my $report_file_base = "$tempdir/report_" . __LINE__;
 local $ENV{REPORT_FILE_BASE} = $report_file_base;
 
-my $obj = CLASS()->new;
-isa_ok( $obj, CLASS(), 'new returned object' );
+my $obj = XT::Files->new;
+isa_ok( $obj, 'XT::Files', 'new returned object' );
 
 my $st = stat "${report_file_base}.new";
 ok( defined $st, '... new was run' );

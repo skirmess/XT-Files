@@ -1,4 +1,4 @@
-package XT::Files::Role::Logger;
+package XT::Files::Logger;
 
 use 5.006;
 use strict;
@@ -6,17 +6,41 @@ use warnings;
 
 our $VERSION = '0.002';
 
-use Role::Tiny;
-
 use Carp          ();
 use Scalar::Util  ();
 use Test::Builder ();
 
+sub new {
+    my $class = shift;
+
+    my $args;
+    if (   @_ == 1
+        && defined Scalar::Util::reftype $_[0]
+        && Scalar::Util::reftype $_[0] eq Scalar::Util::reftype {} )
+    {
+        $args = $_[0];
+    }
+    elsif ( @_ % 2 == 0 ) {
+        $args = {@_};
+    }
+    else {
+        Carp::croak "$class->new() got an odd number of arguments";
+    }
+
+    my $name = $args->{name};
+    Carp::croak 'name attribute required' if !defined $name;
+
+    my $self = bless {
+        _name => $name,
+    }, $class;
+
+    return $self;
+}
+
 sub log {    ## no critic (Subroutines::ProhibitBuiltinHomonyms)
     my ( $self, $msg ) = @_;
 
-    my $msg_with_prefix = $self->_msg_with_prefix($msg);
-    Test::Builder->new->note($msg_with_prefix);
+    Test::Builder->new->note("[$self->{_name}] $msg");
 
     return;
 }
@@ -36,24 +60,10 @@ sub log_fatal {
 
     $self->log($msg);
 
-    my $msg_with_prefix = $self->_msg_with_prefix($msg);
-
     my $package = __PACKAGE__;
     local $Carp::CarpInternal{$package} = 1;    ## no critic (Variables::ProhibitPackageVars)
-    Carp::confess($msg_with_prefix);
-}
 
-sub log_prefix {
-    my ($self) = @_;
-
-    return Scalar::Util::blessed($self);
-}
-
-sub _msg_with_prefix {
-    my ( $self, $msg ) = @_;
-
-    my $msg_with_prefix = '[' . $self->log_prefix . '] ' . $msg;
-    return $msg_with_prefix;
+    Carp::confess("[$self->{_name}] $msg");
 }
 
 1;
@@ -66,7 +76,7 @@ __END__
 
 =head1 NAME
 
-XT::Files::Role::Logger - logging role
+XT::Files::Logger - logger object for XT::Files
 
 =head1 VERSION
 
@@ -74,17 +84,15 @@ Version 0.002
 
 =head1 SYNOPSIS
 
-    use Role::Tiny::With;
-    with 'XT::Files::Role::Logger';
+    my $logger = XT::Files::Logger->new( name => 'plugin name' );
 
-    $self->log($message);
-    $self->log_debug($message);
-    $self->log_fatal($message);
+    $logger->log($message);
+    $logger->log_debug($message);
+    $logger->log_fatal($message);
 
 =head1 DESCRIPTION
 
-This L<Role::Tiny> role adds logging functionality to all L<XT::Files>
-classes.
+The logger used by all L<XT::Files> classes.
 
 =head1 USAGE
 
@@ -102,13 +110,6 @@ C<XT_FILES_DEBUG> is set and true.
 =head2 log_fatal ( MESSAGE )
 
 Logs the message with C<log>, then dies with L<Carp>s C<confess>.
-
-=head2 log_prefix
-
-Returns the prefix that is prepended to every logged message. Defaults to
-the objects class.
-
-Method can be overwritten to change the prefix.
 
 =head1 SEE ALSO
 

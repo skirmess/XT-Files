@@ -6,12 +6,10 @@ use warnings;
 
 our $VERSION = '0.002';
 
-use Role::Tiny::With ();
-
-Role::Tiny::With::with 'XT::Files::Role::Logger';
-
 use Carp         ();
 use Scalar::Util ();
+
+use XT::Files::Logger;
 
 sub new {
     my $class = shift;
@@ -30,26 +28,39 @@ sub new {
         Carp::croak "$class->new() got an odd number of arguments";
     }
 
+    my $name = $args->{name};
+    if ( !defined $name ) {
+        $name = $class;
+    }
+
     my $self = bless {
-        name => $args->{name},
-        xtf  => $args->{xtf},
+        name    => $name,
+        xtf     => $args->{xtf},
+        _logger => XT::Files::Logger->new( name => $name ),
     }, $class;
 
     my $xtf = $self->xtf;
     Carp::croak 'xtf attribute required'             if !defined $xtf;
     Carp::croak q{'xtf' is not of class 'XT::Files'} if !defined Scalar::Util::blessed($xtf) || !$xtf->isa('XT::Files');
 
-    if ( !defined $self->name ) {
-        $self->{name} = Scalar::Util::blessed($self);
-    }
-
     return $self;
 }
 
-sub log_prefix {
-    my ($self) = @_;
+sub log {    ## no critic (Subroutines::ProhibitBuiltinHomonyms)
+    return shift->{_logger}->log(@_);
+}
 
-    return $self->name;
+sub log_debug {
+    return shift->{_logger}->log_debug(@_);
+}
+
+sub log_fatal {
+    my $self = shift;
+
+    my $package = __PACKAGE__;
+    local $Carp::CarpInternal{$package} = 1;    ## no critic (Variables::ProhibitPackageVars)
+
+    return $self->{_logger}->log_fatal(@_);
 }
 
 sub name {
@@ -117,6 +128,11 @@ would result in your plugin being called like so
 =head2 new
 
 Requires the C<xtf> argument.
+
+=head2 log, log_debug, log_fatal
+
+Call the method with the same name of this plugins L<XT::Files::Logger>
+object.
 
 =head2 name
 

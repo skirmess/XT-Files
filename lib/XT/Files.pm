@@ -6,10 +6,6 @@ use warnings;
 
 our $VERSION = '0.002';
 
-use Role::Tiny::With ();
-
-Role::Tiny::With::with 'XT::Files::Role::Logger';
-
 use Carp           ();
 use File::Basename ();
 use File::Find     ();
@@ -18,8 +14,7 @@ use Scalar::Util   ();
 use version 0.81   ();
 
 use XT::Files::File;
-
-use constant MODULE_NAME_RX => qr{ ^ [A-Za-z_] [0-9A-Za-z_]* (?: :: [0-9A-Za-z_]+ )* $ }xs;    ## no critic (RegularExpressions::RequireLineBoundaryMatching)
+use XT::Files::Logger;
 
 #
 # CLASS METHODS
@@ -45,6 +40,7 @@ sub new {
     my $self = bless {
         _excludes => [],
         _file     => {},
+        _logger   => XT::Files::Logger->new( name => $class ),
     }, $class;
 
     if ( exists $args->{'-config'} ) {
@@ -267,6 +263,27 @@ sub exclude {
 }
 
 #
+# Logging
+#
+
+sub log {    ## no critic (Subroutines::ProhibitBuiltinHomonyms)
+    return shift->{_logger}->log(@_);
+}
+
+sub log_debug {
+    return shift->{_logger}->log_debug(@_);
+}
+
+sub log_fatal {
+    my $self = shift;
+
+    my $package = __PACKAGE__;
+    local $Carp::CarpInternal{$package} = 1;    ## no critic (Variables::ProhibitPackageVars)
+
+    return $self->{_logger}->log_fatal(@_);
+}
+
+#
 # PRIVATE METHODS
 #
 
@@ -278,7 +295,7 @@ sub _expand_config_plugin_name {
         $package_name = "XT::Files::Plugin::$plugin_name";
     }
 
-    $self->log_fatal("'$plugin_name' is not a valid plugin name") if $package_name !~ MODULE_NAME_RX;
+    $self->log_fatal("'$plugin_name' is not a valid plugin name") if $package_name !~ m{ \A [A-Za-z_] [0-9A-Za-z_]* (?: :: [0-9A-Za-z_]+ )* \z }xsm;
 
     return $package_name;
 }
@@ -778,6 +795,11 @@ argument and expects an object of the plugin in return.
     my $plugin_object = NAME->new( xtf => $self );
 
 After that it calls the plugins C<run> method and passes it the KEYVALS_REF.
+
+=head2 log, log_debug, log_fatal
+
+Call the method with the same name of C<XT::Files>' L<XT::Files::Logger>
+object.
 
 =head1 EXAMPLES
 

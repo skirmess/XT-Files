@@ -13,11 +13,9 @@ use XT::Files::Plugin::Dirs;
 
 delete $ENV{XT_FILES_DEFAULT_CONFIG_FILE};
 
-use constant CLASS => 'XT::Files::Plugin::Dirs';
+like( exception { XT::Files::Plugin::Dirs->new() }, q{/xtf attribute required/}, q{new throws an exception if 'xtf' argument is missing} );
 
-like( exception { CLASS()->new() }, q{/xtf attribute required/}, q{new throws an exception if 'xtf' argument is missing} );
-
-like( exception { CLASS()->new( xtf => 'hello world' ) }, q{/'xtf' is not of class 'XT::Files'/}, q{new throws an exception if 'xtf' argument is not an XT::Files object} );
+like( exception { XT::Files::Plugin::Dirs->new( xtf => 'hello world' ) }, q{/'xtf' is not of class 'XT::Files'/}, q{new throws an exception if 'xtf' argument is not an XT::Files object} );
 
 chdir 'corpus/dist1' or die "chdir failed: $!";
 
@@ -26,13 +24,13 @@ is( XT::Files->_is_initialized, undef, 'singleton is not initialized' );
 my $xtf = XT::Files->new( -config => undef );
 is_deeply( [ $xtf->files ], [], 'no files are configured' );
 
-my $obj = CLASS()->new( xtf => $xtf );
-isa_ok( $obj, CLASS(), 'new returned object' );
+my $obj = XT::Files::Plugin::Dirs->new( xtf => $xtf );
+isa_ok( $obj, 'XT::Files::Plugin::Dirs', 'new returned object' );
 
 is( $obj->run(), undef, 'run returns undef' );
 is_deeply( [ $xtf->files ], [], 'no files are configured' );
 
-my $expected_output = '[' . CLASS() . q{] Invalid configuration option 'hello = world' for plugin 'Dirs'};
+my $expected_output = q{[XT::Files::Plugin::Dirs] Invalid configuration option 'hello = world' for plugin 'Dirs'};
 test_out("# $expected_output");
 my $output = exception { $obj->run( [ [ hello => 'world' ] ] ) };
 test_test('correct error message');
@@ -71,8 +69,8 @@ is( XT::Files->_is_initialized, undef, 'singleton is not initialized' );
 $xtf = XT::Files->new( -config => undef );
 is_deeply( [ $xtf->files ], [], 'no files are configured' );
 
-$obj = CLASS()->new( xtf => $xtf );
-isa_ok( $obj, CLASS(), 'new returned object' );
+$obj = XT::Files::Plugin::Dirs->new( xtf => $xtf );
+isa_ok( $obj, 'XT::Files::Plugin::Dirs', 'new returned object' );
 
 is(
     $obj->run(

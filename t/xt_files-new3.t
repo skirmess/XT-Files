@@ -12,15 +12,13 @@ use XT::Files;
 
 delete $ENV{XT_FILES_DEFAULT_CONFIG_FILE};
 
-use constant CLASS => 'XT::Files';
-
 chdir 'corpus/dist2' or die "chdir failed: $!";
 
-is( CLASS()->_is_initialized, undef, 'singleton is not initialized' );
+is( XT::Files->_is_initialized, undef, 'singleton is not initialized' );
 
 my $expected_output = q{[XT::Files] Multiple default config files found: '.xtfilesrc' and 'xtfiles.ini'};
 test_out("# $expected_output");
-my $output = exception { CLASS()->new };
+my $output = exception { XT::Files->new };
 test_test('correct error message');
 like( $output, qr{\Q$expected_output\E}, 'new dies if multiple default config files are present' );
 

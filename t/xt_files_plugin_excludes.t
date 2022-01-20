@@ -13,22 +13,20 @@ use XT::Files::Plugin::Excludes;
 
 delete $ENV{XT_FILES_DEFAULT_CONFIG_FILE};
 
-use constant CLASS => 'XT::Files::Plugin::Excludes';
+like( exception { XT::Files::Plugin::Excludes->new() }, q{/xtf attribute required/}, q{new throws an exception if 'xtf' argument is missing} );
 
-like( exception { CLASS()->new() }, q{/xtf attribute required/}, q{new throws an exception if 'xtf' argument is missing} );
-
-like( exception { CLASS()->new( xtf => 'hello world' ) }, q{/'xtf' is not of class 'XT::Files'/}, q{new throws an exception if 'xtf' argument is not an XT::Files object} );
+like( exception { XT::Files::Plugin::Excludes->new( xtf => 'hello world' ) }, q{/'xtf' is not of class 'XT::Files'/}, q{new throws an exception if 'xtf' argument is not an XT::Files object} );
 
 my $xtf = XT::Files->new( -config => undef );
 is_deeply( $xtf->{_excludes}, [], 'no excludes are configured' );
 
-my $obj = CLASS()->new( xtf => $xtf );
-isa_ok( $obj, CLASS(), 'new returned object' );
+my $obj = XT::Files::Plugin::Excludes->new( xtf => $xtf );
+isa_ok( $obj, 'XT::Files::Plugin::Excludes', 'new returned object' );
 
 is( $obj->run(), undef, 'run returns undef' );
 is_deeply( $xtf->{_excludes}, [], 'no excludes are configured' );
 
-my $expected_output = '[' . CLASS() . q{] Invalid configuration option 'hello = world' for plugin 'Excludes'};
+my $expected_output = q{[XT::Files::Plugin::Excludes] Invalid configuration option 'hello = world' for plugin 'Excludes'};
 test_out("# $expected_output");
 my $output = exception { $obj->run( [ [ hello => 'world' ] ] ) };
 test_test('correct error message');

@@ -13,13 +13,11 @@ use XT::Files::File;
 
 delete $ENV{XT_FILES_DEFAULT_CONFIG_FILE};
 
-use constant CLASS => 'XT::Files';
-
 note('file');
 
-is( CLASS()->_is_initialized, undef, 'singleton is not initialized' );
+is( XT::Files->_is_initialized, undef, 'singleton is not initialized' );
 
-my $obj = CLASS()->new( -config => undef );
+my $obj = XT::Files->new( -config => undef );
 
 is( $obj->file('hello'), undef, 'file returns undef if the file does not exist' );
 
@@ -35,7 +33,7 @@ my $file_obj = XT::Files::File->new( name => 'hello' );
 is( $obj->file( 'hello', $file_obj ), $file_obj, 'file(name, obj) inserts an entry' );
 isa_ok( $obj->file('hello'), 'XT::Files::File' );
 
-test_out( '# [' . CLASS() . q{] File is not of class 'XT::Files::File'} );
+test_out(q{# [XT::Files] File is not of class 'XT::Files::File'});
 my $exception = exception { $obj->file( 'hello', bless {}, 'Local::Something' ) };
 test_test();
 
