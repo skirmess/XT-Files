@@ -40,6 +40,8 @@ sub new {
 sub log {    ## no critic (Subroutines::ProhibitBuiltinHomonyms)
     my ( $self, $msg ) = @_;
 
+    # ->diag is printed during 'prove'
+    # ->note is printed during 'prove -v'
     Test::Builder->new->note("[$self->{_name}] $msg");
 
     return;
