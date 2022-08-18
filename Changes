@@ -2,6 +2,7 @@ Revision history for XT-Files
 
 {{$NEXT}}
 
+  - Changed license to the ISC license
   - Removed dependency on Class::Tiny, Role::Tiny, and constant
   - Fixed dependency - is_lax requires version 0.81
 

@@ -44,4 +44,3 @@ resources:
   homepage: https://github.com/skirmess/XT-Files
   repository: https://github.com/skirmess/XT-Files.git
 version: '0.002'
-x_spdx_expression: BSD-2-Clause-FreeBSD
