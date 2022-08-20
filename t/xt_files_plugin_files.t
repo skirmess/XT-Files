@@ -21,11 +21,16 @@ use strict;
 use warnings;
 
 use Test::Builder::Tester;
-use Test::Fatal;
 use Test::More 0.88;
 
 use Cwd;
 use File::Temp;
+
+use File::Basename ();
+use File::Spec     ();
+use lib File::Spec->catdir( File::Basename::dirname( Cwd::abs_path __FILE__ ), 'lib' );
+
+use Local::Test::Exception qw(exception);
 
 use XT::Files;
 use XT::Files::Plugin::Files;

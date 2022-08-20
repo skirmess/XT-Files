@@ -19,10 +19,11 @@ on configure => sub {
 };
 
 on test => sub {
+    requires 'Exporter';
+    requires 'File::Spec';
     requires 'File::Temp';
     requires 'File::stat';
     requires 'Test::Builder::Tester';
-    requires 'Test::Fatal';
     requires 'Test::More', '0.88';
 };
 
